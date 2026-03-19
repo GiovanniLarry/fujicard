@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .result { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e9; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <h1>Fuji Card Market - API Test</h1>
+    <div id="results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        async function testAPI() {
+            try {
+                // Test categories
+                const catRes = await fetch('http://localhost:5000/api/categories');
+                const catData = await catRes.json();
+                
+                let html = '<div class="result success">';
+                html += '<h3>✅ Categories API Working</h3>';
+                html += `<p>Found ${catData.categories?.length || 0} categories</p>`;
+                if (catData.categories) {
+                    html += '<ul>';
+                    catData.categories.slice(0, 3).forEach(cat => {
+                        html += `<li>${cat.name} (${cat.productCount || 0} products)</li>`;
+                    });
+                    html += '</ul>';
+                }
+                html += '</div>';
+                
+                // Test products
+                const prodRes = await fetch('http://localhost:5000/api/products?limit=5');
+                const prodData = await prodRes.json();
+                
+                html += '<div class="result success">';
+                html += '<h3>✅ Products API Working</h3>';
+                html += `<p>Found ${prodData.products?.length || 0} products</p>`;
+                if (prodData.products) {
+                    html += '<ul>';
+                    prodData.products.forEach(prod => {
+                        html += `<li>${prod.name} - £${prod.price}</li>`;
+                    });
+                    html += '</ul>';
+                }
+                html += '</div>';
+                
+                resultsDiv.innerHTML = html;
+            } catch (err) {
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ API Error</h3>
+                        <p><strong>Error:</strong> ${err.message}</p>
+                        <p><strong>Check:</strong> Is the backend server running on port 5000?</p>
+                    </div>
+                `;
+            }
+        }
+        
+        testAPI();
+    </script>
+</body>
+</html>

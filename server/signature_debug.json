@@ -1,0 +1,4 @@
+{
+  "getString": "merchant_id=10000100&merchant_key=46f0cd694581a&return_url=https%3A%2F%2Fwww.example.com%2Fsuccess&cancel_url=https%3A%2F%2Fwww.example.com%2Fcancel&notify_url=https%3A%2F%2Fwww.example.com%2Fnotify&name_first=John&name_last=Doe&email_address=john%40doe.com&m_payment_id=1234&amount=100.00&item_name=Test+Item",
+  "hash": "3e4eaa2e81b724150c853e5c129ef6d3"
+}
