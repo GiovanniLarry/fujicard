@@ -56,6 +56,12 @@ export function authenticateUser(req) {
     }
 }
 
+export function getCartKey(req) {
+    const user = authenticateUser(req);
+    if (user) return user.id;
+    return req.headers['x-session-id'] || 'guest';
+}
+
 export function requireAuth(req, res) {
     const user = authenticateUser(req);
     if (!user) {

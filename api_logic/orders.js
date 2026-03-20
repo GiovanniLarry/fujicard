@@ -74,10 +74,10 @@ export default async function handler(req, res) {
             if (error) throw error;
 
             // Clear cart after order
-            await supabase
-                .from('cart')
-                .delete()
-                .eq('user_id', user.id);
+            const { data: cart } = await supabase.from('carts').select('id').eq('session_id', user.id).single();
+            if (cart) {
+                await supabase.from('cart_items').delete().eq('cart_id', cart.id);
+            }
 
             return res.json(data);
         } catch (error) {
