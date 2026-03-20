@@ -7,20 +7,17 @@ import cartHandler from '../api_logic/cart.js';
 import cryptoWalletsHandler from '../api_logic/crypto-wallets.js';
 
 export default async function handler(req, res) {
-    // 1. Centralized CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-session-id');
 
-    // 2. Preflight
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     try {
-        const url = req.url || '';
-        console.log(`[Shop Router] URL: ${url}`);
+        const { route } = req.query;
+        console.log(`[Shop Router] Route: ${route}, URL: ${req.url}`);
 
-        // 3. Robust Health Check (Direct)
-        if (url.includes('/health')) {
+        if (route === 'health') {
             return res.status(200).json({
                 status: 'ok',
                 time: new Date().toISOString(),
@@ -31,17 +28,21 @@ export default async function handler(req, res) {
             });
         }
 
-        // 4. Sub-handlers
+        if (route === 'products') return await productsHandler(req, res);
+        if (route === 'categories') return await categoriesHandler(req, res);
+        if (route === 'currencies') return await currenciesHandler(req, res);
+        if (route === 'orders') return await ordersHandler(req, res);
+        if (route === 'cart') return await cartHandler(req, res);
+        if (route === 'crypto-wallets') return await cryptoWalletsHandler(req, res);
+
+        // Fallback for direct /api/shop or missed routes
+        const url = req.url || '';
         if (url.includes('/products')) return await productsHandler(req, res);
         if (url.includes('/categories')) return await categoriesHandler(req, res);
-        if (url.includes('/currencies')) return await currenciesHandler(req, res);
-        if (url.includes('/orders')) return await ordersHandler(req, res);
-        if (url.includes('/cart')) return await cartHandler(req, res);
-        if (url.includes('/crypto-wallets')) return await cryptoWalletsHandler(req, res);
 
         return res.status(404).json({
             error: 'Shop endpoint not found',
-            debug: { url, method: req.method }
+            debug: { route, url: req.url, query: req.query }
         });
     } catch (error) {
         console.error('[Shop Router] CRASH:', error);

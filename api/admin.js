@@ -15,48 +15,39 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-session-id');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
     try {
-        const url = req.url || '';
-        const parts = url.split('/').filter(Boolean);
-        const subRoute = parts.slice(2);
+        const { route } = req.query;
+        console.log(`[Admin Router] Route: ${route}, URL: ${req.url}`);
 
-        if (subRoute[0] === 'products') {
-            if (subRoute[1]) {
-                req.query = { ...req.query, id: subRoute[1] };
-                return await productsIdHandler(req, res);
-            }
+        if (route === 'products') {
+            const id = req.query.id;
+            if (id) return await productsIdHandler(req, res);
             return await productsHandler(req, res);
         }
 
-        if (subRoute[0] === 'categories') {
-            if (subRoute[1]) {
-                req.query = { ...req.query, id: subRoute[1] };
-                return await categoriesIdHandler(req, res);
-            }
+        if (route === 'categories') {
+            const id = req.query.id;
+            if (id) return await categoriesIdHandler(req, res);
             return await categoriesHandler(req, res);
         }
 
-        if (subRoute[0] === 'orders') {
-            if (subRoute[1]) {
-                req.query = { ...req.query, id: subRoute[1] };
-                return await ordersIdHandler(req, res);
-            }
+        if (route === 'orders') {
+            const id = req.query.id;
+            if (id) return await ordersIdHandler(req, res);
             return await ordersHandler(req, res);
         }
 
-        if (subRoute[0] === 'stats') return await statsHandler(req, res);
-        if (subRoute[0] === 'notifications') return await notificationsHandler(req, res);
-        if (subRoute[0] === 'paystack-config') return await paystackConfigHandler(req, res);
-        if (subRoute[0] === 'users') return await usersHandler(req, res);
-        if (subRoute[0] === 'users-management') return await usersMgmtHandler(req, res);
+        if (route === 'stats') return await statsHandler(req, res);
+        if (route === 'notifications') return await notificationsHandler(req, res);
+        if (route === 'paystack-config') return await paystackConfigHandler(req, res);
+        if (route === 'users') return await usersHandler(req, res);
+        if (route === 'users-management') return await usersMgmtHandler(req, res);
 
         return res.status(404).json({
             error: 'Admin endpoint not found',
-            debug: { url, method: req.method }
+            debug: { route, url: req.url, query: req.query }
         });
     } catch (error) {
         console.error('[Admin Router] CRASH:', error);

@@ -2,40 +2,52 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/auth/(.*)",
-      "destination": "/api/auth"
+      "source": "/api/auth/:path*",
+      "destination": "/api/auth?route=:path*"
     },
     {
-      "source": "/api/admin/(.*)",
-      "destination": "/api/admin"
-    },
-    {
-      "source": "/api/products",
-      "destination": "/api/shop"
-    },
-    {
-      "source": "/api/categories",
-      "destination": "/api/shop"
-    },
-    {
-      "source": "/api/currencies",
-      "destination": "/api/shop"
+      "source": "/api/admin/:path*",
+      "destination": "/api/admin?route=:path*"
     },
     {
       "source": "/api/health",
-      "destination": "/api/shop"
+      "destination": "/api/shop?route=health"
+    },
+    {
+      "source": "/api/products",
+      "destination": "/api/shop?route=products"
+    },
+    {
+      "source": "/api/products/:id",
+      "destination": "/api/shop?route=products&id=:id"
+    },
+    {
+      "source": "/api/categories",
+      "destination": "/api/shop?route=categories"
+    },
+    {
+      "source": "/api/categories/:id",
+      "destination": "/api/shop?route=categories&id=:id"
+    },
+    {
+      "source": "/api/currencies",
+      "destination": "/api/shop?route=currencies"
     },
     {
       "source": "/api/orders",
-      "destination": "/api/shop"
+      "destination": "/api/shop?route=orders"
+    },
+    {
+      "source": "/api/orders/:id",
+      "destination": "/api/shop?route=orders&id=:id"
     },
     {
       "source": "/api/cart",
-      "destination": "/api/shop"
+      "destination": "/api/shop?route=cart"
     },
     {
       "source": "/api/crypto-wallets",
-      "destination": "/api/shop"
+      "destination": "/api/shop?route=crypto-wallets"
     },
     {
       "source": "/((?!api/).*)",
