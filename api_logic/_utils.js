@@ -56,6 +56,11 @@ export function authenticateUser(req) {
     }
 }
 
+export function optionalAuth(req, res, next) {
+    req.user = authenticateUser(req);
+    if (next) next();
+}
+
 export function getCartKey(req) {
     const user = authenticateUser(req);
     if (user) return user.id;

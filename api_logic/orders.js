@@ -1,4 +1,4 @@
-import { supabase, optionalAuth, getCartKey } from './_utils.js';
+import { supabase, authenticateUser, getCartKey } from './_utils.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
