@@ -7,27 +7,28 @@ import cartHandler from '../api_logic/cart.js';
 import cryptoWalletsHandler from '../api_logic/crypto-wallets.js';
 
 export default async function handler(req, res) {
-    const url = req.url || '';
+    try {
+        const url = req.url || '';
 
-    // Log for debugging (user can check Vercel Logs)
-    console.log(`[Shop Router] Handling URL: ${url}`);
+        // Ensure sub-handlers receive the right context
+        if (url.includes('/products')) return await productsHandler(req, res);
+        if (url.includes('/categories')) return await categoriesHandler(req, res);
+        if (url.includes('/currencies')) return await currenciesHandler(req, res);
+        if (url.includes('/health')) return await healthHandler(req, res);
+        if (url.includes('/orders')) return await ordersHandler(req, res);
+        if (url.includes('/cart')) return await cartHandler(req, res);
+        if (url.includes('/crypto-wallets')) return await cryptoWalletsHandler(req, res);
 
-    // Check if Supabase vars are set
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-        console.error('[Shop Router] CRITICAL: SUPABASE_URL or SUPABASE_ANON_KEY is missing');
+        return res.status(404).json({
+            error: 'Shop endpoint not found',
+            debug: { url, method: req.method }
+        });
+    } catch (error) {
+        console.error('[Shop Router] CRASH:', error);
+        return res.status(500).json({
+            error: 'Internal Server Error (api/shop.js)',
+            message: error.message,
+            stack: error.stack
+        });
     }
-
-    if (url.includes('/products')) return productsHandler(req, res);
-    if (url.includes('/categories')) return categoriesHandler(req, res);
-    if (url.includes('/currencies')) return currenciesHandler(req, res);
-    if (url.includes('/health')) return healthHandler(req, res);
-    if (url.includes('/orders')) return ordersHandler(req, res);
-    if (url.includes('/cart')) return cartHandler(req, res);
-    if (url.includes('/crypto-wallets')) return cryptoWalletsHandler(req, res);
-
-    // Fallback if URL doesn't match standard Vercel format
-    return res.status(404).json({
-        error: 'Shop endpoint not found',
-        debug: { url, method: req.method }
-    });
 }

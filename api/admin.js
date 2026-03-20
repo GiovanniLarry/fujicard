@@ -11,51 +11,59 @@ import usersHandler from '../api_logic/admin/users.js';
 import usersMgmtHandler from '../api_logic/admin/users-management.js';
 
 export default async function handler(req, res) {
-    const url = req.url || '';
-    const parts = url.split('/').filter(Boolean);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-session-id');
 
-    console.log(`[Admin Router] Handling URL: ${url}`);
-
-    // If the URL is just /api/admin or /api/admin/
-    if (parts.length <= 2) {
-        return res.json({ message: 'Admin API root' });
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
     }
 
-    // Determine subRoute (after /api/admin/)
-    const subRoute = parts.slice(2);
+    try {
+        const url = req.url || '';
+        const parts = url.split('/').filter(Boolean);
+        const subRoute = parts.slice(2);
 
-    if (subRoute[0] === 'products') {
-        if (subRoute[1]) {
-            req.query = { ...req.query, id: subRoute[1] };
-            return productsIdHandler(req, res);
+        if (subRoute[0] === 'products') {
+            if (subRoute[1]) {
+                req.query = { ...req.query, id: subRoute[1] };
+                return await productsIdHandler(req, res);
+            }
+            return await productsHandler(req, res);
         }
-        return productsHandler(req, res);
-    }
 
-    if (subRoute[0] === 'categories') {
-        if (subRoute[1]) {
-            req.query = { ...req.query, id: subRoute[1] };
-            return categoriesIdHandler(req, res);
+        if (subRoute[0] === 'categories') {
+            if (subRoute[1]) {
+                req.query = { ...req.query, id: subRoute[1] };
+                return await categoriesIdHandler(req, res);
+            }
+            return await categoriesHandler(req, res);
         }
-        return categoriesHandler(req, res);
-    }
 
-    if (subRoute[0] === 'orders') {
-        if (subRoute[1]) {
-            req.query = { ...req.query, id: subRoute[1] };
-            return ordersIdHandler(req, res);
+        if (subRoute[0] === 'orders') {
+            if (subRoute[1]) {
+                req.query = { ...req.query, id: subRoute[1] };
+                return await ordersIdHandler(req, res);
+            }
+            return await ordersHandler(req, res);
         }
-        return ordersHandler(req, res);
+
+        if (subRoute[0] === 'stats') return await statsHandler(req, res);
+        if (subRoute[0] === 'notifications') return await notificationsHandler(req, res);
+        if (subRoute[0] === 'paystack-config') return await paystackConfigHandler(req, res);
+        if (subRoute[0] === 'users') return await usersHandler(req, res);
+        if (subRoute[0] === 'users-management') return await usersMgmtHandler(req, res);
+
+        return res.status(404).json({
+            error: 'Admin endpoint not found',
+            debug: { url, method: req.method }
+        });
+    } catch (error) {
+        console.error('[Admin Router] CRASH:', error);
+        return res.status(500).json({
+            error: 'Internal Server Error (api/admin.js)',
+            message: error.message,
+            stack: error.stack
+        });
     }
-
-    if (subRoute[0] === 'stats') return statsHandler(req, res);
-    if (subRoute[0] === 'notifications') return notificationsHandler(req, res);
-    if (subRoute[0] === 'paystack-config') return paystackConfigHandler(req, res);
-    if (subRoute[0] === 'users') return usersHandler(req, res);
-    if (subRoute[0] === 'users-management') return usersMgmtHandler(req, res);
-
-    return res.status(404).json({
-        error: 'Admin endpoint not found',
-        debug: { url, parts, subRoute }
-    });
 }
