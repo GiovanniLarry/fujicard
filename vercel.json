@@ -34,12 +34,8 @@
       "destination": "/api/shop?route=currencies"
     },
     {
-      "source": "/api/orders",
-      "destination": "/api/shop?route=orders"
-    },
-    {
-      "source": "/api/orders/:id",
-      "destination": "/api/shop?route=orders&id=:id"
+      "source": "/api/orders/:path*",
+      "destination": "/api/shop?route=orders&subpath=:path*"
     },
     {
       "source": "/api/cart/:path*",

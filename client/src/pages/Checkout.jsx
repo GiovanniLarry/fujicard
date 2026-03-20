@@ -281,7 +281,7 @@ const Checkout = () => {
 
           // Trigger Paystack Popup
           const handler = window.PaystackPop.setup({
-            key: 'pk_live_6b5d612a3ab5346e25e4b3a2ec7accc82590f9b7',
+            key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_6b5d612a3ab5346e25e4b3a2ec7accc82590f9b7',
             email: user.email,
             amount: Math.round(total * 100), // convert to cents
             currency: 'ZAR', // assuming ZAR based on PayFast/Paystack context
@@ -741,7 +741,7 @@ const Checkout = () => {
                   className="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Processing...' : formData.paymentMethod === 'card' ? 'Place Order' : ['cryptomus', 'payfast'].includes(formData.paymentMethod) ? 'Proceed to Payment' : 'Send Order via WhatsApp'}
+                  {loading ? 'Processing...' : formData.paymentMethod === 'card' ? 'Place Order' : ['cryptomus', 'payfast', 'paystack'].includes(formData.paymentMethod) ? 'Proceed to Payment' : 'Send Order via WhatsApp'}
                 </button>
                 <button
                   type="button"
