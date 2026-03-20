@@ -54,7 +54,7 @@ const AdminDashboard = () => {
     // File Input Ref for click-to-upload
     const fileInputRef = useRef(null);
 
-    const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000/api`;
+    const API_URL = import.meta.env.VITE_API_URL || '/api';
 
     // Run strictly once on mount to fetch broad data
     useEffect(() => {

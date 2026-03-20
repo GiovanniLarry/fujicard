@@ -1,4 +1,4 @@
-import { supabase, generateToken, requireAdmin } from './_utils.js';
+import { supabase, generateToken, requireAdmin } from '../_utils.js';
 import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
