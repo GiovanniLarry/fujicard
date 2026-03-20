@@ -1,4 +1,4 @@
-import { supabase, requireAdmin, authenticateAdmin } from '../_utils.js';
+import { supabase, requireAdmin, authenticateAdmin } from './_utils.js';
 
 // In-memory configs (will persist in serverless for short periods)
 let paystackConfig = {

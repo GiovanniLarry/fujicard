@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../_utils.js';
+import { JWT_SECRET } from './_utils.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
