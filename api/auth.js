@@ -1,8 +1,8 @@
-import loginHandler from '../api_logic/auth/login.js';
-import registerHandler from '../api_logic/auth/register.js';
-import meHandler from '../api_logic/auth/me.js';
-import profileHandler from '../api_logic/auth/profile.js';
-import adminLoginHandler from '../api_logic/auth/admin-login.js';
+import loginHandler from './_logic/auth/login.js';
+import registerHandler from './_logic/auth/register.js';
+import meHandler from './_logic/auth/me.js';
+import profileHandler from './_logic/auth/profile.js';
+import adminLoginHandler from './_logic/auth/admin-login.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');

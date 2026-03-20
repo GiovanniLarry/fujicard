@@ -1,10 +1,10 @@
-import productsHandler from '../api_logic/products.js';
-import categoriesHandler from '../api_logic/categories.js';
-import currenciesHandler from '../api_logic/currencies.js';
-import healthHandler from '../api_logic/health.js';
-import ordersHandler from '../api_logic/orders.js';
-import cartHandler from '../api_logic/cart.js';
-import cryptoWalletsHandler from '../api_logic/crypto-wallets.js';
+import productsHandler from './_logic/products.js';
+import categoriesHandler from './_logic/categories.js';
+import currenciesHandler from './_logic/currencies.js';
+import healthHandler from './_logic/health.js';
+import ordersHandler from './_logic/orders.js';
+import cartHandler from './_logic/cart.js';
+import cryptoWalletsHandler from './_logic/crypto-wallets.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,14 +1,16 @@
-import productsHandler from '../api_logic/admin/products.js';
-import productsIdHandler from '../api_logic/admin/products/[id].js';
-import categoriesHandler from '../api_logic/admin/categories.js';
-import categoriesIdHandler from '../api_logic/admin/categories/[id].js';
-import ordersHandler from '../api_logic/admin/orders.js';
-import ordersIdHandler from '../api_logic/admin/orders/[id].js';
-import statsHandler from '../api_logic/admin/stats.js';
-import notificationsHandler from '../api_logic/admin/notifications.js';
-import paystackConfigHandler from '../api_logic/admin/paystack-config.js';
-import usersHandler from '../api_logic/admin/users.js';
-import usersMgmtHandler from '../api_logic/admin/users-management.js';
+import productsIdHandler from './_logic/admin/products/[id].js';
+import categoriesIdHandler from './_logic/admin/categories/[id].js';
+import ordersIdHandler from './_logic/admin/orders/[id].js';
+import statsHandler from './_logic/admin/stats.js';
+import notificationsHandler from './_logic/admin/notifications.js';
+import usersHandler from './_logic/admin/users.js';
+import analyticsHandler from './_logic/admin/analytics.js';
+import productsHandler from './_logic/admin/products.js';
+import ordersHandler from './_logic/admin/orders.js';
+import categoriesHandler from './_logic/admin/categories.js';
+import paystackConfigHandler from './_logic/admin/paystack-config.js';
+import profileHandler from './_logic/admin/profile.js';
+import usersMgmtHandler from './_logic/admin/users-management.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
