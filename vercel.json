@@ -9,15 +9,49 @@
       }
     },
     {
-      "src": "api/**/*.js",
+      "src": "api/*.js",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth"
     },
+    {
+      "source": "/api/admin/(.*)",
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/api/products",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/categories",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/currencies",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/orders",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/cart",
+      "destination": "/api/shop"
+    },
+    {
+      "source": "/api/crypto-wallets",
+      "destination": "/api/shop"
+    }
+  ],
+  "routes": [
     {
       "handle": "filesystem"
     },
