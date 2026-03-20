@@ -91,8 +91,10 @@ export default async function handler(req, res) {
             return res.json({ products: transformedData });
         } catch (error) {
             console.error('Products general error:', error);
-            const msg = error.message || 'Internal server error';
-            return res.status(500).json({ error: msg });
+            return res.status(500).json({
+                error: 'Internal server error (products)',
+                details: error.message || error
+            });
         }
     }
 

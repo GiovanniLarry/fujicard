@@ -33,7 +33,10 @@ export default async function handler(req, res) {
             return res.json({ categories: data || [] });
         } catch (error) {
             console.error('Categories fetch error:', error);
-            return res.status(500).json({ error: 'Failed to fetch categories' });
+            return res.status(500).json({
+                error: 'Failed to fetch categories',
+                details: error.message || error
+            });
         }
     }
 
