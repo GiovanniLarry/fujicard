@@ -42,8 +42,8 @@
       "destination": "/api/shop?route=orders&id=:id"
     },
     {
-      "source": "/api/cart",
-      "destination": "/api/shop?route=cart"
+      "source": "/api/cart/:path*",
+      "destination": "/api/shop?route=cart&subpath=:path*"
     },
     {
       "source": "/api/crypto-wallets",
