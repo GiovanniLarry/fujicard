@@ -135,6 +135,9 @@ export default async function handler(req, res) {
 
         return res.status(404).json({ error: 'Endpoint not found in cart handler' });
 
+    } catch (error) {
+        console.error('Cart operation error:', error);
         const msg = typeof error === 'object' ? (error.message || JSON.stringify(error)) : String(error);
         return res.status(500).json({ error: msg });
     }
+}
