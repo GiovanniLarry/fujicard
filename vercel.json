@@ -2,59 +2,9 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/auth/:path*",
-      "destination": "/api/auth?route=:path*"
-    },
-    {
-      "source": "/api/admin/:path*",
-      "destination": "/api/admin?route=:path*"
-    },
-    {
-      "source": "/api/health",
-      "destination": "/api/shop?route=health"
-    },
-    {
-      "source": "/api/products",
-      "destination": "/api/shop?route=products"
-    },
-    {
-      "source": "/api/products/:id",
-      "destination": "/api/shop?route=products&id=:id"
-    },
-    {
-      "source": "/api/categories",
-      "destination": "/api/shop?route=categories"
-    },
-    {
-      "source": "/api/categories/:id",
-      "destination": "/api/shop?route=categories&id=:id"
-    },
-    {
-      "source": "/api/currencies",
-      "destination": "/api/shop?route=currencies"
-    },
-    {
-      "source": "/api/orders/:path*",
-      "destination": "/api/shop?route=orders&subpath=:path*"
-    },
-    {
-      "source": "/api/cart/:path*",
-      "destination": "/api/shop?route=cart&subpath=:path*"
-    },
-    {
-      "source": "/api/crypto-wallets",
-      "destination": "/api/shop?route=crypto-wallets"
-    },
-    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ],
-  "env": {
-    "SUPABASE_URL": "@supabase_url",
-    "SUPABASE_SERVICE_KEY": "@supabase_service_key",
-    "JWT_SECRET": "@jwt_secret",
-    "PAYSTACK_PUBLIC_KEY": "@paystack_public_key",
-    "PAYSTACK_SECRET_KEY": "@paystack_secret_key"
-  }
+  "trailingSlash": false
 }
