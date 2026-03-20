@@ -282,7 +282,7 @@ const Checkout = () => {
           // Trigger Paystack Popup
           const handler = window.PaystackPop.setup({
             key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_6b5d612a3ab5346e25e4b3a2ec7accc82590f9b7',
-            email: user.email,
+            email: user?.email || user?.email_address || 'customer@fujicard.com',
             amount: Math.round(total * 100), // convert to cents
             currency: 'ZAR', // assuming ZAR based on PayFast/Paystack context
             ref: order.id,

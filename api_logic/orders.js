@@ -52,7 +52,6 @@ export default async function handler(req, res) {
         if (subpath === 'payfast/generate') {
             try {
                 const { orderId } = req.body;
-                // Join with shipping_addresses to get the real email
                 const { data: order, error } = await supabase
                     .from('orders')
                     .select('*, shipping_addresses(*)')
@@ -62,17 +61,21 @@ export default async function handler(req, res) {
                 if (error || !order) return res.status(404).json({ error: 'Order not found' });
 
                 const shipping = order.shipping_addresses || {};
-                const email = shipping.email || 'customer@fujicard.com';
-                const firstName = shipping.first_name || 'Customer';
-                const lastName = shipping.last_name || 'User';
+                const email = (shipping.email || user?.email || 'customer@fujicard.com').trim();
+                const firstName = (shipping.first_name || user?.firstName || 'Customer').trim();
+                const lastName = (shipping.last_name || user?.lastName || 'User').trim();
 
                 const PASSPHRASE = process.env.PAYFAST_PASSPHRASE || 'Desormais190';
+                const host = req.headers.host || 'fujicard-m571.vercel.app';
+                const protocol = req.headers['x-forwarded-proto'] || 'https';
+                const baseUrl = `${protocol}://${host}`;
+
                 const payload = {
                     merchant_id: process.env.PAYFAST_MERCHANT_ID || '22427478',
                     merchant_key: process.env.PAYFAST_MERCHANT_KEY || 'kt2fwjkagmjli',
-                    return_url: `${req.headers.origin}/order-confirmation/${order.id}`,
-                    cancel_url: `${req.headers.origin}/cart`,
-                    notify_url: `https://fujicard-m571.vercel.app/api/orders/payfast/notify`,
+                    return_url: `${baseUrl}/order-confirmation/${order.id}`,
+                    cancel_url: `${baseUrl}/cart?order_id=${order.id}&cancel=true`,
+                    notify_url: `${baseUrl}/api/orders/payfast/notify`,
                     name_first: firstName,
                     name_last: lastName,
                     email_address: email,
