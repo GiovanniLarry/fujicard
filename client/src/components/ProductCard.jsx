@@ -13,12 +13,12 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Debug log for mobile testing
     console.log('Add to cart clicked for product:', product);
     console.log('Product ID:', product.id);
     console.log('Product name:', product.name);
-    
+
     try {
       setAdding(true);
       await addToCart(product.id, 1);
@@ -26,7 +26,8 @@ const ProductCard = ({ product }) => {
     } catch (error) {
       console.error('Failed to add to cart:', error);
       console.error('Error response:', error.response?.data);
-      alert(`Failed to add to cart: ${error.response?.data?.error || error.message}`);
+      const errorMsg = error.response?.data?.error || error.message || 'Unknown Error';
+      alert(`Failed to add to cart: ${typeof errorMsg === 'object' ? JSON.stringify(errorMsg) : errorMsg}`);
     } finally {
       setAdding(false);
     }
@@ -43,8 +44,8 @@ const ProductCard = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`} className="product-card">
       <div className="product-image">
-        <img 
-          src={imageError ? placeholderImage : imageUrl} 
+        <img
+          src={imageError ? placeholderImage : imageUrl}
           alt={product.name}
           onError={() => setImageError(true)}
         />
@@ -80,7 +81,7 @@ const ProductCard = ({ product }) => {
             )}
             <span className="product-price">{formatPrice(product.price)}</span>
           </div>
-          <button 
+          <button
             className="add-to-cart-btn"
             onClick={handleAddToCart}
             disabled={adding || product.stock === 0}

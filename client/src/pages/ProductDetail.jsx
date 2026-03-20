@@ -46,7 +46,8 @@ const ProductDetail = () => {
       await addToCart(product.id, quantity);
       alert('Added to cart!');
     } catch (error) {
-      alert('Failed to add to cart');
+      const errorMsg = error.response?.data?.error || error.message || 'Unknown Error';
+      alert(`Failed to add to cart: ${typeof errorMsg === 'object' ? JSON.stringify(errorMsg) : errorMsg}`);
     } finally {
       setAdding(false);
     }
@@ -93,8 +94,8 @@ const ProductDetail = () => {
         <div className="product-detail">
           <div className="product-image-section">
             <div className="main-image">
-              <img 
-                src={imageError ? placeholderImage : product.image} 
+              <img
+                src={imageError ? placeholderImage : product.image}
                 alt={product.name}
                 onError={() => setImageError(true)}
               />
@@ -110,9 +111,9 @@ const ProductDetail = () => {
           <div className="product-info-section">
             <span className="product-category">{product.category}</span>
             <h1 className="product-title">{product.name}</h1>
-            
+
             <div className="product-price-large">{formatPrice(product.price)}</div>
-            
+
             <div className="product-attributes">
               <div className="attribute">
                 <span className="label">Set:</span>
@@ -157,21 +158,21 @@ const ProductDetail = () => {
             {product.stock > 0 && (
               <div className="add-to-cart-section">
                 <div className="quantity-selector">
-                  <button 
+                  <button
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
                   >
                     -
                   </button>
                   <span>{quantity}</span>
-                  <button 
+                  <button
                     onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
                     disabled={quantity >= product.stock}
                   >
                     +
                   </button>
                 </div>
-                <button 
+                <button
                   className="add-to-cart-btn"
                   onClick={handleAddToCart}
                   disabled={adding}

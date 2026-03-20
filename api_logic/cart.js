@@ -137,7 +137,24 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Cart operation error:', error);
-        const msg = typeof error === 'object' ? (error.message || JSON.stringify(error)) : String(error);
-        return res.status(500).json({ error: msg });
+
+        // Comprehensive error extraction
+        let errorString = 'Unknown Error';
+        if (typeof error === 'string') {
+            errorString = error;
+        } else if (error && error.message) {
+            errorString = error.message;
+        } else if (error && error.details) {
+            errorString = error.details;
+        } else {
+            try {
+                errorString = JSON.stringify(error);
+            } catch (e) {
+                errorString = String(error);
+            }
+        }
+
+        // Return a plain string in the error field to guarantee alert compatibility
+        return res.status(500).json({ error: errorString });
     }
 }
