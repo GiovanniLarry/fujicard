@@ -52,8 +52,19 @@ export default async function handler(req, res) {
         if (subpath === 'payfast/generate') {
             try {
                 const { orderId } = req.body;
-                const { data: order, error } = await supabase.from('orders').select('*').eq('id', orderId).single();
+                // Join with shipping_addresses to get the real email
+                const { data: order, error } = await supabase
+                    .from('orders')
+                    .select('*, shipping_addresses(*)')
+                    .eq('id', orderId)
+                    .single();
+
                 if (error || !order) return res.status(404).json({ error: 'Order not found' });
+
+                const shipping = order.shipping_addresses || {};
+                const email = shipping.email || 'customer@fujicard.com';
+                const firstName = shipping.first_name || 'Customer';
+                const lastName = shipping.last_name || 'User';
 
                 const PASSPHRASE = process.env.PAYFAST_PASSPHRASE || 'Desormais190';
                 const payload = {
@@ -61,9 +72,10 @@ export default async function handler(req, res) {
                     merchant_key: process.env.PAYFAST_MERCHANT_KEY || 'kt2fwjkagmjli',
                     return_url: `${req.headers.origin}/order-confirmation/${order.id}`,
                     cancel_url: `${req.headers.origin}/cart`,
-                    notify_url: `https://fujicardshop.app/api/orders/payfast/notify`,
-                    name_first: 'Customer',
-                    email_address: 'customer@fujicard.com',
+                    notify_url: `https://fujicard-m571.vercel.app/api/orders/payfast/notify`,
+                    name_first: firstName,
+                    name_last: lastName,
+                    email_address: email,
                     m_payment_id: String(order.id),
                     amount: parseFloat(order.total).toFixed(2),
                     item_name: `Order ${order.order_number}`
