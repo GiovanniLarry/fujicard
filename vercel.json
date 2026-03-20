@@ -1,18 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/auth/(.*)",
@@ -49,15 +36,11 @@
     {
       "source": "/api/crypto-wallets",
       "destination": "/api/shop"
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/((?!api/).*)",
+      "destination": "/$1"
     }
-  ]
+  ],
+  "trailingSlash": false
 }
