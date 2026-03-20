@@ -12,9 +12,16 @@ import usersMgmtHandler from '../api_logic/admin/users-management.js';
 
 export default async function handler(req, res) {
     const url = req.url || '';
-    const parts = url.split('/').filter(Boolean); // e.g., ["api", "admin", "products", "123"]
+    const parts = url.split('/').filter(Boolean);
 
-    // Normalize path to exclude /api/admin
+    console.log(`[Admin Router] Handling URL: ${url}`);
+
+    // If the URL is just /api/admin or /api/admin/
+    if (parts.length <= 2) {
+        return res.json({ message: 'Admin API root' });
+    }
+
+    // Determine subRoute (after /api/admin/)
     const subRoute = parts.slice(2);
 
     if (subRoute[0] === 'products') {
@@ -47,5 +54,8 @@ export default async function handler(req, res) {
     if (subRoute[0] === 'users') return usersHandler(req, res);
     if (subRoute[0] === 'users-management') return usersMgmtHandler(req, res);
 
-    return res.status(404).json({ error: 'Admin endpoint not found' });
+    return res.status(404).json({
+        error: 'Admin endpoint not found',
+        debug: { url, parts, subRoute }
+    });
 }
