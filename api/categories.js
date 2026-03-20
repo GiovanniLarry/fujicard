@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 .order('name');
 
             if (error) throw error;
-            return res.json(data || []);
+            return res.json({ categories: data || [] });
         } catch (error) {
             return res.status(500).json({ error: 'Failed to fetch categories' });
         }
