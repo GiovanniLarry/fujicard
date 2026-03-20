@@ -1,16 +1,16 @@
-import productsIdHandler from './_logic/admin/products/byId.js';
-import categoriesIdHandler from './_logic/admin/categories/byId.js';
-import ordersIdHandler from './_logic/admin/orders/byId.js';
-import statsHandler from './_logic/admin/stats.js';
-import notificationsHandler from './_logic/admin/notifications.js';
-import usersHandler from './_logic/admin/users.js';
-import analyticsHandler from './_logic/admin/analytics.js';
-import productsHandler from './_logic/admin/products.js';
-import ordersHandler from './_logic/admin/orders.js';
-import categoriesHandler from './_logic/admin/categories.js';
-import paystackConfigHandler from './_logic/admin/paystack-config.js';
-import profileHandler from './_logic/admin/profile.js';
-import usersMgmtHandler from './_logic/admin/users-management.js';
+import productsIdHandler from './_logic/admin-products-byId.js';
+import categoriesIdHandler from './_logic/admin-categories-byId.js';
+import ordersIdHandler from './_logic/admin-orders-byId.js';
+import statsHandler from './_logic/admin-stats.js';
+import notificationsHandler from './_logic/admin-notifications.js';
+import usersHandler from './_logic/admin-users.js';
+import analyticsHandler from './_logic/admin-analytics.js';
+import productsHandler from './_logic/admin-products.js';
+import ordersHandler from './_logic/admin-orders.js';
+import categoriesHandler from './_logic/admin-categories.js';
+import paystackConfigHandler from './_logic/admin-paystack-config.js';
+import profileHandler from './_logic/admin-profile.js';
+import usersMgmtHandler from './_logic/admin-users-management.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
