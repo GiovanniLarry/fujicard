@@ -46,7 +46,7 @@
       "destination": "/api/shop?route=crypto-wallets"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
