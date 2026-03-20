@@ -1,19 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
-import jwt from 'jsonwebtoken';
+import * as jwt_pkg from 'jsonwebtoken';
+
+// Handle both default and named imports for jsonwebtoken in ESM
+const jwt = jwt_pkg.default || jwt_pkg;
 
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = (supabaseUrl && supabaseKey)
-    ? createClient(supabaseUrl, supabaseKey)
-    : {
-        from: (table) => ({
-            select: () => ({ order: () => Promise.resolve({ data: [], error: { message: 'Supabase URL/Key missing.' } }) }),
-            upsert: () => Promise.resolve({ error: { message: 'Supabase URL/Key missing.' } }),
-            update: () => Promise.resolve({ error: { message: 'Supabase URL/Key missing.' } }),
-            delete: () => Promise.resolve({ error: { message: 'Supabase URL/Key missing.' } })
-        })
-    };
+let supabaseClient;
+try {
+    supabaseClient = (supabaseUrl && supabaseKey)
+        ? createClient(supabaseUrl, supabaseKey)
+        : null;
+} catch (e) {
+    console.error('Supabase init error:', e);
+    supabaseClient = null;
+}
+
+export const supabase = supabaseClient || {
+    from: (table) => ({
+        select: () => ({
+            eq: () => ({ single: () => Promise.resolve({ data: null, error: { message: 'Supabase client not initialized' } }) }),
+            order: () => Promise.resolve({ data: [], error: { message: 'Supabase client not initialized' } })
+        }),
+        upsert: () => Promise.resolve({ error: { message: 'Supabase client not initialized' } }),
+        update: () => Promise.resolve({ error: { message: 'Supabase client not initialized' } }),
+        delete: () => Promise.resolve({ error: { message: 'Supabase client not initialized' } })
+    })
+};
 
 export const JWT_SECRET = process.env.JWT_SECRET || 'fujicard-secret-key-2024-change-in-production';
 
@@ -30,7 +44,7 @@ export function authenticateAdmin(req) {
 
 export function requireAdmin(req, res) {
     const user = authenticateAdmin(req);
-    if (!user) { res.status(401).json({ error: 'Not authenticated' }); return null; }
+    if (!user) { res.status(401).json({ error: "Not authenticated" }); return null; }
     return user;
 }
 
