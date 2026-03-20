@@ -1,4 +1,4 @@
-import { supabase, authenticateAdmin } from '../_utils.js';
+import { supabase, authenticateAdmin } from './_utils.js';
 
 // Crypto wallet config
 let cryptoWalletConfig = {

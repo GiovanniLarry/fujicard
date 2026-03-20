@@ -1,4 +1,4 @@
-import { supabase, authenticateAdmin } from '../_utils.js';
+import { supabase, authenticateAdmin } from '../../_utils.js';
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,10 +19,10 @@ export default async function handler(req, res) {
         // For serverless, we'll just return success
         // In production, you'd use a service like Vercel Blob or Cloudinary
         const { coin } = req.body;
-        
-        return res.json({ 
-            message: 'QR code uploaded successfully', 
-            filename: `${coin}-qr.png` 
+
+        return res.json({
+            message: 'QR code uploaded successfully',
+            filename: `${coin}-qr.png`
         });
     }
 
