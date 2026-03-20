@@ -16,6 +16,19 @@ export default async function handler(req, res) {
         if (!user) return;
 
         try {
+            const { id } = req.query;
+
+            if (id) {
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('*')
+                    .eq('id', id)
+                    .eq('user_id', user.id)
+                    .single();
+                if (error) throw error;
+                return res.json(data);
+            }
+
             const { data, error } = await supabase
                 .from('orders')
                 .select('*')

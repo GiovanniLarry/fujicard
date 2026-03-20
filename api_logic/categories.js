@@ -11,6 +11,18 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
         try {
+            const { id } = req.query;
+
+            if (id) {
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                if (error) throw error;
+                return res.json(data);
+            }
+
             const { data, error } = await supabase
                 .from('categories')
                 .select('*')
