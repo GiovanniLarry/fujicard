@@ -5,9 +5,7 @@ import ProductCard from '../components/ProductCard';
 import PriceRange from '../components/PriceRange';
 import './Products.css';
 
-const API_URL = window.location.hostname === 'localhost' 
-  ? `http://${window.location.hostname}:5000/api` 
-  : `http://${window.location.hostname}:5000/api`;
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -45,8 +43,8 @@ const Products = () => {
 
   const fetchFilterOptions = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_URL}/products/filters/options`, { 
-        params: { category } 
+      const response = await axios.get(`${API_URL}/products/filters/options`, {
+        params: { category }
       });
       setFilterOptions(response.data);
     } catch (error) {
@@ -64,7 +62,7 @@ const Products = () => {
     const newFilters = { ...filters, [key]: value };
     if (!value) delete newFilters[key];
     setFilters(newFilters);
-    
+
     const newParams = new URLSearchParams(searchParams);
     if (value) {
       newParams.set(key, value);
@@ -139,7 +137,7 @@ const Products = () => {
             <span className="product-count">{pagination.totalProducts || 0} products</span>
           </div>
           <div className="header-right">
-            <button 
+            <button
               className="filter-toggle"
               onClick={() => setShowFilters(!showFilters)}
             >
@@ -151,7 +149,7 @@ const Products = () => {
               </svg>
               <span className="filter-text">Filters</span>
             </button>
-            <button 
+            <button
               className="mobile-close-btn"
               onClick={() => setShowFilters(false)}
               aria-label="Close filters"
@@ -161,7 +159,7 @@ const Products = () => {
                 <line x1="18" y1="18" x2="6" y2="18"></line>
               </svg>
             </button>
-            <select 
+            <select
               className="sort-select"
               value={searchParams.get('sort') || ''}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
@@ -183,7 +181,7 @@ const Products = () => {
               <button className="clear-filters" onClick={clearFilters}>
                 Clear All
               </button>
-              <button 
+              <button
                 className="filter-close-btn"
                 onClick={() => setShowFilters(false)}
                 aria-label="Close filters"
@@ -198,7 +196,7 @@ const Products = () => {
             {filterOptions.categories?.length > 0 && (
               <div className="filter-group">
                 <h4>Category</h4>
-                <select 
+                <select
                   value={searchParams.get('category') || ''}
                   onChange={(e) => handleFilterChange('category', e.target.value)}
                 >
@@ -213,7 +211,7 @@ const Products = () => {
             {filterOptions.rarities?.length > 0 && (
               <div className="filter-group">
                 <h4>Rarity</h4>
-                <select 
+                <select
                   value={searchParams.get('rarity') || ''}
                   onChange={(e) => handleFilterChange('rarity', e.target.value)}
                 >
@@ -227,7 +225,7 @@ const Products = () => {
 
             <div className="filter-group">
               <h4>Price Range</h4>
-              <PriceRange 
+              <PriceRange
                 onFilterChange={handlePriceRangeChange}
                 maxPrice={1000000}
               />
@@ -258,14 +256,14 @@ const Products = () => {
 
                 {pagination.totalPages > 1 && (
                   <div className="pagination">
-                    <button 
+                    <button
                       disabled={pagination.currentPage === 1}
                       onClick={() => handlePageChange(pagination.currentPage - 1)}
                     >
                       Previous
                     </button>
                     <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
-                    <button 
+                    <button
                       disabled={pagination.currentPage === pagination.totalPages}
                       onClick={() => handlePageChange(pagination.currentPage + 1)}
                     >

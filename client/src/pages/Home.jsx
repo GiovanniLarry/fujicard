@@ -5,9 +5,7 @@ import ProductCard from '../components/ProductCard';
 import AnnouncementSlider from '../components/AnnouncementSlider';
 import './Home.css';
 
-const API_URL = window.location.hostname === 'localhost' 
-  ? `http://${window.location.hostname}:5000/api` 
-  : `http://${window.location.hostname}:5000/api`;
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -19,15 +17,15 @@ const Home = () => {
   useEffect(() => {
     console.log('Home useEffect triggered');
     fetchData();
-    
+
     // Detect mobile device
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
@@ -36,18 +34,18 @@ const Home = () => {
   const fetchData = async () => {
     try {
       console.log('Fetching home page data...');
-      
+
       // Fetch categories
       const categoriesResponse = await axios.get(`${API_URL}/categories`);
       console.log('Categories response:', categoriesResponse.data);
-      
+
       // Fetch featured products - show more on mobile, limited on desktop
       const limit = isMobile ? 12 : 8;
-      const productsResponse = await axios.get(`${API_URL}/products`, { 
-        params: { featured: 'true', limit } 
+      const productsResponse = await axios.get(`${API_URL}/products`, {
+        params: { featured: 'true', limit }
       });
       console.log('Featured products response:', productsResponse.data);
-      
+
       if (categoriesResponse.data && categoriesResponse.data.categories) {
         console.log('Setting categories:', categoriesResponse.data.categories.length, 'categories');
         setCategories(categoriesResponse.data.categories);
@@ -55,13 +53,13 @@ const Home = () => {
         console.log('No categories data in response');
         setCategories([]);
       }
-      
+
       if (productsResponse.data && productsResponse.data.products) {
         setFeaturedProducts(productsResponse.data.products);
       } else {
         setFeaturedProducts([]);
       }
-      
+
     } catch (error) {
       console.error('Failed to fetch data:', error);
       console.error('Error details:', error.response?.data || error.message);
@@ -77,10 +75,10 @@ const Home = () => {
     try {
       setLoading(true);
       const limit = isMobile ? 20 : 16; // Show more when "View More" is clicked
-      const productsResponse = await axios.get(`${API_URL}/products`, { 
-        params: { featured: 'true', limit } 
+      const productsResponse = await axios.get(`${API_URL}/products`, {
+        params: { featured: 'true', limit }
       });
-      
+
       if (productsResponse.data && productsResponse.data.products) {
         setFeaturedProducts(productsResponse.data.products);
         setShowAllFeatured(true);
@@ -119,7 +117,7 @@ const Home = () => {
               </div>
               <div className="trust-item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 <span>Buyer Protection</span>
               </div>
@@ -147,11 +145,11 @@ const Home = () => {
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
-              
+
               {/* Show View More button on mobile if there are more products */}
               {isMobile && !showAllFeatured && featuredProducts.length > (isMobile ? 6 : 4) && (
                 <div className="view-more-container">
-                  <button 
+                  <button
                     className="btn btn-outline view-more-btn"
                     onClick={handleShowMoreFeatured}
                     disabled={loading}

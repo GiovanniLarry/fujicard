@@ -17,7 +17,7 @@ const AdminAuth = () => {
 
     try {
       // Connects to the backend admin-login endpoint we are about to create
-      const API_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5000/api`;
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
       const response = await axios.post(`${API_URL}/auth/admin-login`, {
         username,
         password
@@ -47,28 +47,28 @@ const AdminAuth = () => {
         <form onSubmit={handleLogin} className="admin-form">
           <div className="form-group-admin">
             <label>Admin ID</label>
-            <input 
-              type="text" 
-              value={username} 
+            <input
+              type="text"
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your administrative ID"
-              required 
-            />
-          </div>
-          
-          <div className="form-group-admin">
-            <label>Passcode</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required 
+              required
             />
           </div>
 
-          <button 
-            type="submit" 
+          <div className="form-group-admin">
+            <label>Passcode</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
             className="admin-btn-primary"
             disabled={loading}
           >

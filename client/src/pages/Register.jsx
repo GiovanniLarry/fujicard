@@ -18,9 +18,7 @@ const Register = () => {
 
   // Debug: Log API URL being used
   useEffect(() => {
-    const apiUrl = window.location.hostname === 'localhost'
-      ? `http://${window.location.hostname}:5000/api`
-      : `http://${window.location.hostname}:5000/api`;
+    const apiUrl = import.meta.env.VITE_API_URL || '/api';
     console.log('Register component - API URL:', apiUrl);
     console.log('Register component - Current hostname:', window.location.hostname);
   }, []);

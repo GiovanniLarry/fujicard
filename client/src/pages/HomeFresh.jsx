@@ -4,7 +4,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import './Home.css';
 
-const API_URL = `http://${window.location.hostname}:5000/api`;
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const HomeFresh = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -14,17 +14,17 @@ const HomeFresh = () => {
   const fetchData = async () => {
     try {
       console.log('🔄 FRESH: Fetching home page data...');
-      
+
       // Fetch categories
       const categoriesResponse = await axios.get(`${API_URL}/categories`);
       console.log('✅ FRESH: Categories response:', categoriesResponse.data);
-      
+
       // Fetch featured products
-      const productsResponse = await axios.get(`${API_URL}/products`, { 
-        params: { featured: 'true', limit: 8 } 
+      const productsResponse = await axios.get(`${API_URL}/products`, {
+        params: { featured: 'true', limit: 8 }
       });
       console.log('✅ FRESH: Featured products response:', productsResponse.data);
-      
+
       if (categoriesResponse.data && categoriesResponse.data.categories) {
         console.log('📦 FRESH: Setting categories:', categoriesResponse.data.categories.length, 'categories');
         setCategories(categoriesResponse.data.categories);
@@ -32,13 +32,13 @@ const HomeFresh = () => {
         console.log('❌ FRESH: No categories data in response');
         setCategories([]);
       }
-      
+
       if (productsResponse.data && productsResponse.data.products) {
         setFeaturedProducts(productsResponse.data.products);
       } else {
         setFeaturedProducts([]);
       }
-      
+
     } catch (error) {
       console.error('❌ FRESH: Failed to fetch data:', error);
       console.error('❌ FRESH: Error details:', error.response?.data || error.message);
@@ -80,7 +80,7 @@ const HomeFresh = () => {
               </div>
               <div className="trust-item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 <span>Buyer Protection</span>
               </div>
@@ -107,21 +107,21 @@ const HomeFresh = () => {
               {categories.map(category => {
                 console.log('🎨 FRESH: Rendering category:', category);
                 return (
-                  <Link 
-                    key={category.id} 
+                  <Link
+                    key={category.id}
                     to={`/products?category=${category.id}`}
                     className="category-card"
                     onClick={() => console.log('🔗 FRESH: Category clicked:', category.name, 'ID:', category.id)}
                   >
                     <div className="category-image">
-                      <img 
-                        src={category.image || category.image_url} 
-                        alt={category.name} 
+                      <img
+                        src={category.image || category.image_url}
+                        alt={category.name}
                         onError={(e) => {
                           console.log('🖼️ FRESH: Image failed to load for category:', category.name);
                           e.target.onerror = null;
                           e.target.src = `https://via.placeholder.com/200x200?text=${encodeURIComponent(category.name)}`;
-                        }} 
+                        }}
                       />
                     </div>
                     <div className="category-info">

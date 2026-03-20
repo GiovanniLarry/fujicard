@@ -6,10 +6,7 @@ import CurrencySelector from './CurrencySelector';
 import axios from 'axios';
 import './Header.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 
-  (window.location.hostname === 'localhost' 
-    ? `http://${window.location.hostname}:5000/api` 
-    : `http://${window.location.hostname}:5000/api`);
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +22,7 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         // Scrolling down
         setIsHeaderVisible(false);
@@ -33,7 +30,7 @@ const Header = () => {
         // Scrolling up or at top
         setIsHeaderVisible(true);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
@@ -90,12 +87,12 @@ const Header = () => {
                 <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#e94560"/>
-                      <stop offset="100%" stopColor="#ff6b6b"/>
+                      <stop offset="0%" stopColor="#e94560" />
+                      <stop offset="100%" stopColor="#ff6b6b" />
                     </linearGradient>
                   </defs>
-                  <rect x="5" y="8" width="28" height="38" rx="3" fill="url(#logoGrad)" transform="rotate(-10 19 27)"/>
-                  <rect x="17" y="4" width="28" height="38" rx="3" fill="#1a1a2e" transform="rotate(5 31 23)"/>
+                  <rect x="5" y="8" width="28" height="38" rx="3" fill="url(#logoGrad)" transform="rotate(-10 19 27)" />
+                  <rect x="17" y="4" width="28" height="38" rx="3" fill="#1a1a2e" transform="rotate(5 31 23)" />
                   <text x="25" y="28" fontSize="16" fontWeight="bold" fill="white" textAnchor="middle">FM</text>
                 </svg>
               </div>
@@ -104,7 +101,7 @@ const Header = () => {
                 <span className="logo-tagline">MARKET</span>
               </div>
             </Link>
-            
+
             <form className="search-form" onSubmit={handleSearch}>
               <input
                 type="text"
@@ -156,7 +153,7 @@ const Header = () => {
                   <span className="cart-count">{cart.itemCount}</span>
                 )}
               </Link>
-              <button 
+              <button
                 className="mobile-menu-btn"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
@@ -174,7 +171,7 @@ const Header = () => {
       {/* Mobile Navigation */}
       <nav className={`mobile-nav ${mobileMenuOpen ? 'open' : ''}`}>
         <div className="nav-header">
-          <button 
+          <button
             className="nav-close-btn"
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Close menu"
@@ -191,8 +188,8 @@ const Header = () => {
             ) : categories.length > 0 ? (
               categories.map(category => (
                 <li key={category.id || category.name}>
-                  <Link 
-                    to={`/products?category=${encodeURIComponent(category.name.toLowerCase())}`} 
+                  <Link
+                    to={`/products?category=${encodeURIComponent(category.name.toLowerCase())}`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {category.name}

@@ -13,9 +13,7 @@ const Login = () => {
 
   // Debug: Log API URL being used
   useEffect(() => {
-    const apiUrl = window.location.hostname === 'localhost' 
-      ? `http://${window.location.hostname}:5000/api` 
-      : `http://${window.location.hostname}:5000/api`;
+    const apiUrl = import.meta.env.VITE_API_URL || '/api';
     console.log('Login component - API URL:', apiUrl);
     console.log('Login component - Current hostname:', window.location.hostname);
   }, []);
@@ -29,9 +27,9 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     console.log('Login form submitted with data:', { email: formData.email, password: '***' });
-    
+
     setLoading(true);
     setError('');
 
