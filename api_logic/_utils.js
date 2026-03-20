@@ -1,10 +1,21 @@
 import { createClient } from '@supabase/supabase-js';
 import jwt from 'jsonwebtoken';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize only if keys are present to prevent top-level crash during import
+export const supabase = (supabaseUrl && supabaseKey)
+    ? createClient(supabaseUrl, supabaseKey)
+    : {
+        from: (table) => {
+            console.error(`[Supabase Mock] Table ${table} requested but URL/Key is missing!`);
+            return { select: () => ({ order: () => Promise.resolve({ data: [], error: { message: 'Supabase URL/Key missing. Please check Vercel Env Vars.' } }) }) };
+        }
+    };
+
+if (!supabaseUrl) console.error('[Supabase Init] WARNING: SUPABASE_URL is not defined');
+if (!supabaseKey) console.error('[Supabase Init] WARNING: SUPABASE_KEY (ANON/SERVICE) is not defined');
 
 export const JWT_SECRET = process.env.JWT_SECRET || 'fujicard-secret-key-2024-change-in-production';
 

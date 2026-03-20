@@ -7,14 +7,34 @@ import cartHandler from '../api_logic/cart.js';
 import cryptoWalletsHandler from '../api_logic/crypto-wallets.js';
 
 export default async function handler(req, res) {
+    // 1. Centralized CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-session-id');
+
+    // 2. Preflight
+    if (req.method === 'OPTIONS') return res.status(200).end();
+
     try {
         const url = req.url || '';
+        console.log(`[Shop Router] URL: ${url}`);
 
-        // Ensure sub-handlers receive the right context
+        // 3. Robust Health Check (Direct)
+        if (url.includes('/health')) {
+            return res.status(200).json({
+                status: 'ok',
+                time: new Date().toISOString(),
+                env: {
+                    has_url: !!process.env.SUPABASE_URL,
+                    has_key: !!(process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY)
+                }
+            });
+        }
+
+        // 4. Sub-handlers
         if (url.includes('/products')) return await productsHandler(req, res);
         if (url.includes('/categories')) return await categoriesHandler(req, res);
         if (url.includes('/currencies')) return await currenciesHandler(req, res);
-        if (url.includes('/health')) return await healthHandler(req, res);
         if (url.includes('/orders')) return await ordersHandler(req, res);
         if (url.includes('/cart')) return await cartHandler(req, res);
         if (url.includes('/crypto-wallets')) return await cryptoWalletsHandler(req, res);
